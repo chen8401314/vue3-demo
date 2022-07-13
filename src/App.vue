@@ -1,30 +1,29 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+        <el-container style="width:auto;height:100%;overflow:hidden;">
+            <el-header height="120px" style="background:#c2ece4;">
+                <Head/>
+            </el-header>
+            <el-container style="background:aliceblue;">
+                <el-aside style="height:100%;">
+                    <Aside/>
+                </el-aside>
+                <el-main>
+                    <Main/>
+                </el-main>
+            </el-container>
+        </el-container>
 </template>
+<script>
+    import Head from '@/views/Head.vue'
+    import Aside from '@/views/Aside.vue'
+    import Main from '@/views/Main.vue'
 
+    export default {
+        name: 'App',
+        components: {
+            Head, Aside, Main
+        }
+    }
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
