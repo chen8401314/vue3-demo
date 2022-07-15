@@ -17,7 +17,8 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    //import axios from 'axios';
+    import {testList} from "../common/api.js";
     export default {
         name: 'List',
         data(){
@@ -40,19 +41,29 @@
                 this.getData();
                 console.log(this.size);
             },
-            getData() {
-                axios
-                    .get('http://localhost:8069/test/anon/findPage?pages='+this.pages+'&size='+this.size).then((res) => {
-                    //用axios的方法引入地址
-                    this.datas=res.data.data.records;
-                    this.pages = res.data.data.current;
-                    this.size = res.data.data.size;
-                    this.total = res.data.data.total;
-                    //赋值
-                    console.log(res.data.data);
-                })
-            }
-        },
+           async getData() {
+              const data  =  await testList({pages: this.pages, size: this.size});
+               this.datas=data.records;
+               this.pages =data.current;
+               this.size = data.size;
+               this.total = data.total;
+               /*       axios.defaults.withCredentials = true;
+                      axios
+                          .get('http://localhost:8069/test/anon/findPage?pages='+this.pages+'&size='+this.size).then((res) => {
+                              if(res.data.code=='500101'){
+                                  this.$router.push({ path: '/login' })
+                              }else{
+                                  //用axios的方法引入地址
+                                  this.datas=res.data.data.records;
+                                  this.pages = res.data.data.current;
+                                  this.size = res.data.data.size;
+                                  this.total = res.data.data.total;
+                                  //赋值
+                                  console.log(res.data.data);
+                              }
+      */
+                }
+            },
         mounted(){
             this.getData();
         }

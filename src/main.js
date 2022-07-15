@@ -7,9 +7,7 @@ import 'element-plus/theme-chalk/index.css';
 
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 import './style/index.css'
-const app = createApp(App);
-app.use(store)
-app.use(ElementPlus, {
+createApp(App).use(store).use(ElementPlus, {
     size: 'small',
     locale: {
         el: {
@@ -22,7 +20,5 @@ app.use(ElementPlus, {
             },
         }
     }
-})
-app.use(locale)
-app.use(router)
-app.mount('#app')
+}
+).use(locale).use(router).mount('#app');

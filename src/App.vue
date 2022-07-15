@@ -1,29 +1,31 @@
 <template>
-        <el-container style="width:auto;height:100%;overflow:hidden;">
-            <el-header height="120px" style="background:#c2ece4;">
-                <Head/>
-            </el-header>
-            <el-container style="background:aliceblue;">
-                <el-aside style="height:100%;">
-                    <Aside/>
-                </el-aside>
-                <el-main>
-                    <Main/>
-                </el-main>
-            </el-container>
-        </el-container>
+    <div id="app">
+        <router-view v-if="isRouterActive"></router-view>
+    </div>
 </template>
 <script>
-    import Head from '@/views/Head.vue'
-    import Aside from '@/views/Aside.vue'
-    import Main from '@/views/Main.vue'
-
     export default {
-        name: 'App',
-        components: {
-            Head, Aside, Main
+        name: 'app',
+        provide () {
+            return {
+                reloadAll: this.reloadAll
+            }
+        },
+        data () {
+            return {
+                isRouterActive: true
+            }
+        },
+        methods: {
+            reloadAll () {
+                this.isRouterActive = false
+                this.$nextTick(() => {
+                    this.isRouterActive = true
+                })
+            }
         }
     }
+
 </script>
 <style>
 </style>
