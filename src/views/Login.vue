@@ -8,7 +8,7 @@
                 <el-input type="password" placeholder="请输入密码" v-model="password"  show-password/>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit" style="padding-left:20px;padding-right:20px;height:30px;">登录</el-button>
+                <el-button type="primary" @click="onSubmit" @keyup.enter="keyDown(e)" style="padding-left:20px;padding-right:20px;height:30px;">登录</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -29,7 +29,20 @@
              this.$router.push({
                  name:'Home'
              })
-            }
+            },
+            keyDown(e) {
+                // 回车则执行登录方法 enter键的ASCII是13
+                if (e.keyCode == 13 || e.keyCode == 100) {
+                    this.onSubmit(); // 定义的登录方法
+                }
+            },
+
+        },mounted(){
+            // 绑定监听事件
+            window.addEventListener("keydown", this.keyDown);
+        },destroyed() {
+            // 销毁事件
+            window.removeEventListener("keydown", this.keyDown, false);
         }
     }
 </script>

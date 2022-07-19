@@ -47,21 +47,6 @@
                this.pages =data.current;
                this.size = data.size;
                this.total = data.total;
-               /*       axios.defaults.withCredentials = true;
-                      axios
-                          .get('http://localhost:8069/test/anon/findPage?pages='+this.pages+'&size='+this.size).then((res) => {
-                              if(res.data.code=='500101'){
-                                  this.$router.push({ path: '/login' })
-                              }else{
-                                  //用axios的方法引入地址
-                                  this.datas=res.data.data.records;
-                                  this.pages = res.data.data.current;
-                                  this.size = res.data.data.size;
-                                  this.total = res.data.data.total;
-                                  //赋值
-                                  console.log(res.data.data);
-                              }
-      */
                 }
             },
         mounted(){

@@ -7,6 +7,19 @@ export const login = (data) => {
         data
     });
 }
+
+export const getUserInfo = () => {
+    return axiosHttp({
+        method: 'GET',
+        url: 'user/getUserInfo'
+    });
+}
+export const logout = () => {
+    return axiosHttp({
+        method: 'GET',
+        url: 'user/logout'
+    });
+}
     export const testList = (params) => {
         return axiosHttp({
             method: 'GET',
