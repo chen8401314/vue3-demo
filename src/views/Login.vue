@@ -40,7 +40,7 @@
         },mounted(){
             // 绑定监听事件
             window.addEventListener("keydown", this.keyDown);
-        },destroyed() {
+        },unmounted() {
             // 销毁事件
             window.removeEventListener("keydown", this.keyDown, false);
         }

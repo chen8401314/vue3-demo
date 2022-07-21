@@ -9,7 +9,7 @@ export const login = (data) => {
 }
 
 export const getUserInfo = () => {
-    return axiosHttp({
+    return  axiosHttp({
         method: 'GET',
         url: 'user/getUserInfo'
     });
@@ -20,10 +20,17 @@ export const logout = () => {
         url: 'user/logout'
     });
 }
-    export const testList = (params) => {
-        return axiosHttp({
-            method: 'GET',
-            url: '/test/findPage',
-            params:params
-        });
-    }
+export const testList = (params) => {
+    return axiosHttp({
+        method: 'GET',
+        url: '/test/findPageDTO',
+        params: params
+    });
+}
+export const save = (data) => {
+    return axiosHttp({
+        method: 'POST',
+        url: '/test/save',
+        data
+    });
+}
