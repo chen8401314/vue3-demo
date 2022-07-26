@@ -21,6 +21,8 @@
         <el-table-column prop="name" label="姓名" width="180"/>
         <el-table-column prop="sex" label="性别" width="180"/>
         <el-table-column prop="department" label="部门" width="180"/>
+        <el-table-column prop="birthday" label="生日" width="180"/>
+        <el-table-column prop="address" label="家庭住址" width="180"/>
         <el-table-column prop="status.msg" label="状态"/>
     </el-table>
     <el-pagination
@@ -61,6 +63,15 @@
             <el-form-item label="年龄" prop="age">
                 <el-input type="number" v-model="formData.age"/>
             </el-form-item>
+            <el-form-item label="生日" prop="birthday">
+                <el-date-picker
+                        v-model="formData.birthday"
+                        type="date"
+                />
+            </el-form-item>
+            <el-form-item label="家庭住址" prop="homeAddress">
+                <el-input v-model="formData.homeAddress"/>
+            </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
@@ -81,7 +92,7 @@
         name: 'List',
         data() {
             return {
-                formData: {sex: '男', isMarry: 'false'},
+                formData: {sex: '男', isMarry: 'false',birthday: ''},
                 dialogVisible: false,
                 searchKey: '',
                 pages: 1,

@@ -7,24 +7,12 @@ import 'element-plus/dist/index.css';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 import './style/index.css'
-
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 const app = createApp(App);
    app.use(store).use(ElementPlus, {
-        size: 'small',
-        locale: {
-            el: {
-                ...locale.el,
-                pagination: {
-                    pagesize: '条/页',
-                    total: `共 {total} 条`,
-                    goto: '前往第',
-                    pageClassifier: '页'
-                },
-            }
-        }
-    }
-).use(locale).use(router).mount('#app');
+       locale: zhCn,
+   }).use(locale).use(router).mount('#app');
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }

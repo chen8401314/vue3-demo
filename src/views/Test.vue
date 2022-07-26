@@ -1,37 +1,75 @@
 <template>
-    <div class="test">
-        <el-row :gutter="20">
-            <el-col :span="10">
-                <el-input v-model="name" placeholder="请输入姓名" />
-           </el-col>
-            <el-col :span="10">
-                <el-input v-model="adress" placeholder="请输入地址"/>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="1">
-                <el-button type="primary" @click="greet">确定</el-button>
-            </el-col>
-        </el-row>
-    </div>
+        <div className="block">
+            <span className="demonstration">Picker with quick options</span>
+            <el-date-picker
+                    v-model="value2"
+                    type="date"
+                    placeholder="Pick a day"
+                    :disabled-date="disabledDate"
+                    :shortcuts="shortcuts"
+                    :size="size"
+            />
+        </div>
 </template>
 
-<script>
-  export default {
-      name: 'Test',
-      data(){
-          return{
-              name:'',
-              adress:''
-          }
-      },
-      methods: {
-          greet() {
-              // `methods` 内部的 `this` 指向当前活动实例
-              alert('test=:'+this.name)
-          }
-      }
-  }
+<script setup>
+    import {ref} from 'vue'
+
+    const size = ref<'' | 'large' | 'small'>('')
+
+    const value1 = ref('')
+    const value2 = ref('')
+
+    const shortcuts = [
+        {
+            text: 'Today',
+            value: new Date(),
+        },
+        {
+            text: 'Yesterday',
+            value: () => {
+                const date = new Date()
+                date.setTime(date.getTime() - 3600 * 1000 * 24)
+                return date
+            },
+        },
+        {
+            text: 'A week ago',
+            value: () => {
+                const date = new Date()
+                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+                return date
+            },
+        },
+    ]
+
+    const disabledDate = (time) => {
+        return time.getTime() > Date.now()
+    }
 </script>
+<style scoped>
+    .demo-date-picker {
+        display: flex;
+        width: 100%;
+        padding: 0;
+        flex-wrap: wrap;
+    }
 
+    .demo-date-picker .block {
+        padding: 30px 0;
+        text-align: center;
+        border-right: solid 1px var(--el-border-color);
+        flex: 1;
+    }
 
+    .demo-date-picker .block:last-child {
+        border-right: none;
+    }
+
+    .demo-date-picker .demonstration {
+        display: block;
+        color: var(--el-text-color-secondary);
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+</style>
