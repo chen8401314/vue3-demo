@@ -23,6 +23,9 @@
                     this.isRouterActive = true
                 })
             }
+        },mounted() {
+            this.reloadAll();
+            console.log("testtesttest=",this.isRouterActive)
         }
     }
 

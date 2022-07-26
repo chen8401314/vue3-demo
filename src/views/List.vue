@@ -3,7 +3,6 @@
             v-model="searchKey"
             style="width:300px;height:30px"
             placeholder="请输入姓名搜索"
-
     >
         <template #append>
             <el-button @click="getData();">
@@ -17,7 +16,7 @@
                style="margin-left: 20px;width:60px;height:30px;">
         新增
     </el-button>
-    <el-table :data="datas" style="margin-top:20px;">
+    <el-table :data="datas" style="margin-top:20px;"  v-loading="loading" >
         <el-table-column prop="id" label="ID" v-if="false"/>
         <el-table-column prop="name" label="姓名" width="180"/>
         <el-table-column prop="sex" label="性别" width="180"/>
@@ -67,7 +66,8 @@
             :title="dialogTitle+'用户'"
             width="30%"
     >
-        <el-form :disabled="formDisabled" :model="formData" label-width="120px" :rules="rules" ref="form">
+        <el-form :disabled="formDisabled" :model="formData" label-width="120px" :rules="rules"
+                 ref="form">
             <el-form-item v-if="false" label="ID" type="hidden" prop="id">
                 <el-input v-model="formData.id"></el-input>
             </el-form-item>
@@ -127,6 +127,7 @@
                 pages: 1,
                 size: 10,
                 total: 0,
+                loading: false,
                 datas: [],
                 rules: {
                     name: [
@@ -187,11 +188,13 @@
                 })
             },
             async getData() {
+                this.loading = true;
                 const data = await testList({pages: this.pages, size: this.size, name: this.searchKey});
                 this.datas = data.records;
                 this.pages = data.current;
                 this.size = data.size;
                 this.total = data.total;
+                this.loading = false;
             }
         },
         mounted() {
