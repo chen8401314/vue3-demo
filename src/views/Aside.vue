@@ -1,5 +1,5 @@
 <template>
-    <el-scrollbar :max-height="maxHeight" style="background: gray">
+    <el-scrollbar :max-height="maxHeight">
         <el-menu
                 active-text-color="#ffd04b"
                 background-color="#545c64"
@@ -73,12 +73,17 @@
             }
         }, mounted() {
             this.maxHeight = window.innerHeight - 80;
+            window.onresize = () => {
+                return (() => {
+                    this.maxHeight = window.innerHeight - 80;
+                })();
+            };
         }
     }
 
 </script>
 <style>
-    .scrollbar-demo-item {
+/*    .scrollbar-demo-item {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -88,5 +93,5 @@
         border-radius: 4px;
         background: var(--el-color-primary-light-9);
         color: var(--el-color-primary);
-    }
+    }*/
 </style>

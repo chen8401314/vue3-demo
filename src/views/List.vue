@@ -18,12 +18,39 @@
         新增
     </el-button>
     <el-table :data="datas" style="margin-top:20px;">
+        <el-table-column prop="id" label="ID" v-if="false"/>
         <el-table-column prop="name" label="姓名" width="180"/>
         <el-table-column prop="sex" label="性别" width="180"/>
         <el-table-column prop="department" label="部门" width="180"/>
         <el-table-column prop="birthday" label="生日" width="180"/>
         <el-table-column prop="address" label="家庭住址" width="180"/>
         <el-table-column prop="status.msg" label="状态"/>
+        <el-table-column fixed="right" label="操作" width="180">
+            <template #default="scope">
+                <el-button @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
+                    <el-icon style="vertical-align: middle">
+                        <Search/>
+                    </el-icon>
+                </el-button>
+                <el-button type="primary"
+                           @click="dialogTitle='编辑';formDisabled=false;handleSearch(scope.$index, scope.row);" circle>
+                    <el-icon style="vertical-align: middle">
+                        <Edit/>
+                    </el-icon>
+                </el-button>
+
+                <el-popconfirm title="确定要删除吗?" @confirm="delTest(scope.$index, scope.row);">
+                    <template #reference>
+                        <el-button type="danger" circle>
+                            <el-icon style="vertical-align: middle">
+                                <Delete/>
+                            </el-icon>
+                        </el-button>
+                    </template>
+                </el-popconfirm>
+
+            </template>
+        </el-table-column>
     </el-table>
     <el-pagination
             v-model:currentPage="pages"
@@ -37,24 +64,26 @@
     </el-pagination>
     <el-dialog
             v-model="dialogVisible"
-            title="新增用户"
+            :title="dialogTitle+'用户'"
             width="30%"
     >
-        <el-form :model="formData" label-width="120px" :rules="rules" ref="form">
-            <el-form-item label="姓名"
-                          prop="name">
+        <el-form :disabled="formDisabled" :model="formData" label-width="120px" :rules="rules" ref="form">
+            <el-form-item v-if="false" label="ID" type="hidden" prop="id">
+                <el-input v-model="formData.id"></el-input>
+            </el-form-item>
+            <el-form-item label="姓名" prop="name">
                 <el-input v-model="formData.name"/>
             </el-form-item>
-            <el-form-item label="性别">
+            <el-form-item label="性别" prop="sex">
                 <el-radio-group v-model="formData.sex">
                     <el-radio label="男"/>
                     <el-radio label="女"/>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="是否结婚">
+            <el-form-item label="是否结婚" prop="isMarry">
                 <el-radio-group v-model="formData.isMarry">
-                    <el-radio label="false">否</el-radio>
-                    <el-radio label="true">是</el-radio>
+                    <el-radio :label="false">否</el-radio>
+                    <el-radio :label="true">是</el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="部门" prop="department">
@@ -74,27 +103,27 @@
             </el-form-item>
         </el-form>
         <template #footer>
-      <span class="dialog-footer">
+      <span class="dialog-footer" v-if="!formDisabled">
         <el-button @click="dialogVisible = false;">取消</el-button>
-        <el-button type="primary" @click="save()"
-        >保存</el-button
-        >
+        <el-button type="primary" @click="save()">保存</el-button>
       </span>
         </template>
     </el-dialog>
 </template>
 
 <script>
-    import {testList} from "../common/api.js";
-    import {save} from "../common/api.js";
+    import {save, findById, testList, delById} from "../common/api.js";
 
+    const initFormData = {id: '', sex: '男', isMarry: false, birthday: ''};
     export default {
         name: 'List',
         data() {
             return {
-                formData: {sex: '男', isMarry: 'false',birthday: ''},
+                formData: initFormData,
                 dialogVisible: false,
+                dialogTitle: '新增',
                 searchKey: '',
+                formDisabled: false,
                 pages: 1,
                 size: 10,
                 total: 0,
@@ -123,11 +152,22 @@
                 this.getData();
                 console.log(this.size);
             },
-            addTest() {
+            async handleSearch(index, row) {
+                let data = await findById({id: row.id});
+                this.formData = data;
                 this.dialogVisible = true;
+            },
+            addTest() {
+                this.formDisabled = false;
                 if (this.$refs.form) {
                     this.$refs.form.resetFields();
                 }
+                this.formData = initFormData;
+                this.dialogVisible = true;
+            },
+            async delTest(index, row) {
+                await delById({id: row.id});
+                this.getData();
             },
             handleClick(e) {
                 let target = e.target;
@@ -138,10 +178,7 @@
             }, save() {
                 this.$refs.form.validate(async (valid) => {
                     if (valid) {
-                        console.log("form", this.formData);
-                        console.log("form1", this.formData.Target);
                         let data = JSON.parse(JSON.stringify(this.formData));
-                        console.log("form2", data);
                         await save(data);
                         this.dialogVisible = false;
                         this.getData();

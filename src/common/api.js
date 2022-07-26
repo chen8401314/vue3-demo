@@ -27,6 +27,20 @@ export const testList = (params) => {
         params: params
     });
 }
+export const findById = (params) => {
+    return axiosHttp({
+        method: 'GET',
+        url: '/test/findById',
+        params: params
+    });
+}
+export const delById = (params) => {
+    return axiosHttp({
+        method: 'DELETE',
+        url: '/test/delById',
+        params: params
+    });
+}
 export const save = (data) => {
     return axiosHttp({
         method: 'POST',
