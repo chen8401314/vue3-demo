@@ -23,7 +23,8 @@
         name: 'Head',
         data() {
             return {
-                userInfo: {}
+                userInfo: {},
+                store:useStore()
             }
         },
         methods: {
@@ -36,10 +37,8 @@
                     })
                 }
             }
-        },async mounted() {
-            const store = useStore();
-            await store.dispatch("getUserInfo");
-            this.userInfo = store.state.userInfo
+        },mounted() {
+            this.userInfo = this.store.state.userInfo
         }
     }
 </script>

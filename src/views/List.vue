@@ -16,13 +16,14 @@
                style="margin-left: 20px;width:60px;height:30px;">
         新增
     </el-button>
-    <el-table :data="datas" style="margin-top:20px;"  v-loading="loading" >
+    <el-table :data="datas" style="margin-top:20px;"  v-loading="loading" border height="auto">
         <el-table-column prop="id" label="ID" v-if="false"/>
+        <el-table-column type="index" label="序号"  width="80" />
         <el-table-column prop="name" label="姓名" width="180"/>
         <el-table-column prop="sex" label="性别" width="180"/>
         <el-table-column prop="department" label="部门" width="180"/>
         <el-table-column prop="birthday" label="生日" width="180"/>
-        <el-table-column prop="address" label="家庭住址" width="180"/>
+        <el-table-column prop="homeAddress" label="家庭住址" width="360"/>
         <el-table-column prop="status.msg" label="状态"/>
         <el-table-column fixed="right" label="操作" width="180">
             <template #default="scope">
