@@ -23,8 +23,21 @@
         <el-table-column prop="sex" label="性别" width="180"/>
         <el-table-column prop="department" label="部门" width="180"/>
         <el-table-column prop="birthday" label="生日" width="180"/>
+        <el-table-column label="是否结婚">
+            <template #default="scope">
+                <el-switch v-model="scope.row.isMarry" @change="updateIsMarry(scope.row)"/>
+            </template>
+        </el-table-column>
         <el-table-column prop="homeAddress" label="家庭住址" width="360"/>
-        <el-table-column prop="status.msg" label="状态"/>
+        <el-table-column label="状态">
+            <template #default="scope">
+                <el-switch  v-model="scope.row.status.value"
+                           :active-value="1"
+                           :inactive-value="0"
+                            @change="updateStatus(scope.row)"
+                />
+            </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="180">
             <template #default="scope">
                 <el-button @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
@@ -159,11 +172,17 @@
                 this.formData = data;
                 this.dialogVisible = true;
             },
+            async updateIsMarry(row){
+                await save({id:row.id,isMarry: row.isMarry});
+            },
+            async updateStatus(row){
+                await save({id:row.id,status: row.status.value});
+            },
             addTest() {
                 this.formDisabled = false;
-                if (this.$refs.form) {
+          /*      if (this.$refs.form) {
                     this.$refs.form.resetFields();
-                }
+                }*/
                 this.formData = initFormData;
                 this.dialogVisible = true;
             },
