@@ -212,7 +212,6 @@
             },
             addTest() {
                 this.formDisabled = false;
-                console.log('initFormData',initFormData)
                 this.formData = {...initFormData};
                 this.dialogVisible = true;
             },
