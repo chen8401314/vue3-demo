@@ -122,7 +122,6 @@
                         action="http://localhost:8069/minio/anon/uploadFile"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
-                        ref="photoUpload"
                 >
                    <div style="display:inline-block;position:relative"  v-if="formData.photo">
                        <img :src="baseFileUrl+formData.photo" class="avatar"/>
@@ -131,7 +130,7 @@
                         <Plus/>
                     </el-icon>
                 </el-upload>
-                <button  v-if="formData.photo"  style="position:absolute;top:0;left:186px;" @click=" this.$refs.photoUpload.disabled='true';removePhoto()">
+                <button  v-if="formData.photo"  style="position:absolute;top:0;left:186px;" @click="removePhoto()">
                     <el-icon><Delete /></el-icon>
                 </button>
             </el-form-item>
