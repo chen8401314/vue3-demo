@@ -119,19 +119,22 @@
             <el-form-item label="头像" prop="photo">
                 <el-upload
                         class="avatar-uploader"
-                        action="http://localhost:8069/minio/anon/uploadFile"
+                        :action="baseApiUrl+'minio/anon/uploadFile'"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                 >
-                   <div style="display:inline-block;position:relative"  v-if="formData.photo">
-                       <img :src="baseFileUrl+formData.photo" class="avatar"/>
-                   </div>
+                    <div style="display:inline-block;position:relative" v-if="formData.photo">
+                        <img :src="baseFileUrl+formData.photo" class="avatar"/>
+                    </div>
                     <el-icon v-else class="avatar-uploader-icon">
                         <Plus/>
                     </el-icon>
                 </el-upload>
-                <button  v-if="formData.photo"  style="position:absolute;top:0;left:186px;" @click="removePhoto()">
-                    <el-icon><Delete /></el-icon>
+                <button v-if="formData.photo && !this.formDisabled" style="position:absolute;top:0;left:186px;"
+                        @click="removePhoto()">
+                    <el-icon>
+                        <Delete/>
+                    </el-icon>
                 </button>
             </el-form-item>
         </el-form>
@@ -145,14 +148,16 @@
 </template>
 
 <script>
-    import {save, findById, testList, delById, baseFileUrl} from "../common/api.js";
-    const initFormData = {id: '', sex: '男', isMarry: false, birthday: '', photo: ''};
+    import {save, findById, testList, delById, baseFileUrl, baseApiUrl} from "../common/api.js";
+
+    const initFormData = {id: '', name: '', department: '', sex: '男', isMarry: false, birthday: '', photo: ''};
     export default {
         name: 'List',
         data() {
             return {
-                formData: initFormData,
+                formData: {...initFormData},
                 baseFileUrl: baseFileUrl,
+                baseApiUrl: baseApiUrl,
                 dialogVisible: false,
                 dialogTitle: '新增',
                 searchKey: '',
@@ -207,17 +212,9 @@
             },
             addTest() {
                 this.formDisabled = false;
-                this.formData = initFormData;
+                console.log('initFormData',initFormData)
+                this.formData = {...initFormData};
                 this.dialogVisible = true;
-            },
-            handlePhotoPreview(){
-
-            },
-            handlePhotoDownload(){
-
-            },
-            handlePhotoRemove(){
-
             },
             async delTest(index, row) {
                 await delById({id: row.id});
@@ -233,9 +230,12 @@
             }, save() {
                 this.$refs.form.validate(async (valid) => {
                     if (valid) {
-                        let data = JSON.parse(JSON.stringify(this.formData));
+                        let  data = {
+                            ...this.formData
+                        }
                         await save(data);
                         this.dialogVisible = false;
+                        this.formData = initFormData;
                         this.getData();
                         this.$message.success("操作成功");
                     }
