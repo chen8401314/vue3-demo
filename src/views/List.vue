@@ -174,21 +174,21 @@
             },
             async updateIsMarry(row){
                 await save({id:row.id,isMarry: row.isMarry});
+                this.$message.success("操作成功");
             },
             async updateStatus(row){
                 await save({id:row.id,status: row.status.value});
+                this.$message.success("操作成功");
             },
             addTest() {
                 this.formDisabled = false;
-          /*      if (this.$refs.form) {
-                    this.$refs.form.resetFields();
-                }*/
                 this.formData = initFormData;
                 this.dialogVisible = true;
             },
             async delTest(index, row) {
                 await delById({id: row.id});
                 this.getData();
+                this.$message.success("操作成功");
             },
             handleClick(e) {
                 let target = e.target;
@@ -203,7 +203,7 @@
                         await save(data);
                         this.dialogVisible = false;
                         this.getData();
-
+                        this.$message.success("操作成功");
                     }
                 })
             },
