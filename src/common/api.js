@@ -1,5 +1,6 @@
 import axiosHttp from './axios.js'
 
+export const baseFileUrl = 'http://192.168.5.78:9000/test/';
 export const login = (data) => {
     return axiosHttp({
         method: 'POST',

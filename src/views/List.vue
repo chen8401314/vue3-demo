@@ -16,9 +16,9 @@
                style="margin-left: 20px;width:60px;height:30px;">
         新增
     </el-button>
-    <el-table :data="datas" style="margin-top:20px;"  v-loading="loading" border height="auto">
+    <el-table :data="datas" style="margin-top:20px;" v-loading="loading" border height="auto">
         <el-table-column prop="id" label="ID" v-if="false"/>
-        <el-table-column type="index" label="序号"  width="80" />
+        <el-table-column type="index" label="序号" width="80"/>
         <el-table-column prop="name" label="姓名" width="180"/>
         <el-table-column prop="sex" label="性别" width="180"/>
         <el-table-column prop="department" label="部门" width="180"/>
@@ -31,10 +31,10 @@
         <el-table-column prop="homeAddress" label="家庭住址" width="360"/>
         <el-table-column label="状态">
             <template #default="scope">
-                <el-switch  v-model="scope.row.status.value"
+                <el-switch v-model="scope.row.status.value"
                            :active-value="1"
                            :inactive-value="0"
-                            @change="updateStatus(scope.row)"
+                           @change="updateStatus(scope.row)"
                 />
             </template>
         </el-table-column>
@@ -115,6 +115,26 @@
             <el-form-item label="家庭住址" prop="homeAddress">
                 <el-input v-model="formData.homeAddress"/>
             </el-form-item>
+
+            <el-form-item label="头像" prop="photo">
+                <el-upload
+                        class="avatar-uploader"
+                        action="http://localhost:8069/minio/anon/uploadFile"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        ref="photoUpload"
+                >
+                   <div style="display:inline-block;position:relative"  v-if="formData.photo">
+                       <img :src="baseFileUrl+formData.photo" class="avatar"/>
+                   </div>
+                    <el-icon v-else class="avatar-uploader-icon">
+                        <Plus/>
+                    </el-icon>
+                </el-upload>
+                <button  v-if="formData.photo"  style="position:absolute;top:0;left:186px;" @click=" this.$refs.photoUpload.disabled='true';removePhoto()">
+                    <el-icon><Delete /></el-icon>
+                </button>
+            </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer" v-if="!formDisabled">
@@ -126,14 +146,14 @@
 </template>
 
 <script>
-    import {save, findById, testList, delById} from "../common/api.js";
-
-    const initFormData = {id: '', sex: '男', isMarry: false, birthday: ''};
+    import {save, findById, testList, delById, baseFileUrl} from "../common/api.js";
+    const initFormData = {id: '', sex: '男', isMarry: false, birthday: '', photo: ''};
     export default {
         name: 'List',
         data() {
             return {
                 formData: initFormData,
+                baseFileUrl: baseFileUrl,
                 dialogVisible: false,
                 dialogTitle: '新增',
                 searchKey: '',
@@ -172,18 +192,33 @@
                 this.formData = data;
                 this.dialogVisible = true;
             },
-            async updateIsMarry(row){
-                await save({id:row.id,isMarry: row.isMarry});
+            async updateIsMarry(row) {
+                await save({id: row.id, isMarry: row.isMarry});
                 this.$message.success("操作成功");
             },
-            async updateStatus(row){
-                await save({id:row.id,status: row.status.value});
+            async updateStatus(row) {
+                await save({id: row.id, status: row.status.value});
                 this.$message.success("操作成功");
+            },
+            handleAvatarSuccess(res, uploadFile) {
+                this.formData.photo = res.data.filePath;
+            },
+            removePhoto() {
+                this.formData.photo = '';
             },
             addTest() {
                 this.formDisabled = false;
                 this.formData = initFormData;
                 this.dialogVisible = true;
+            },
+            handlePhotoPreview(){
+
+            },
+            handlePhotoDownload(){
+
+            },
+            handlePhotoRemove(){
+
             },
             async delTest(index, row) {
                 await delById({id: row.id});
@@ -223,6 +258,32 @@
     }
 </script>
 <style>
+    .avatar-uploader .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+
+    .avatar-uploader .el-upload {
+        border: 1px dashed var(--el-border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: var(--el-transition-duration-fast);
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: var(--el-color-primary);
+    }
+
+    .el-icon.avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        text-align: center;
+    }
 </style>
 
 
