@@ -122,6 +122,7 @@
                         :action="baseApiUrl+'minio/anon/uploadFile'"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
+                        :disabled="formDisabled"
                 >
                     <div style="display:inline-block;position:relative" v-if="formData.photo">
                         <img :src="baseFileUrl+formData.photo" class="avatar"/>
