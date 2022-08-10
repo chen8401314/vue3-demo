@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-    import {save, findById, testList, delById, baseFileUrl, baseApiUrl,successMsg} from "../common/api.js";
+    import {save, findById, testList, delById, baseFileUrl, baseApiUrl, successMsg} from "../common/api.js";
     import {ref, onMounted} from "vue"
     import {ElMessage} from 'element-plus'
 
@@ -221,8 +221,8 @@
         target.blur();
     }
     const saveTest = async (form) => {
-        console.log('form:',form)
-        await  form.validate(async (valid) => {
+        console.log('form:', form)
+        await form.validate(async (valid) => {
             if (valid) {
                 let data = {
                     ...formData.value
