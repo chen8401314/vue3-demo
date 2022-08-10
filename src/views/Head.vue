@@ -27,31 +27,28 @@
 
 
 </template>
-<script>
+<script setup>
     import {logout} from "../common/api.js"
     import { useStore } from "vuex";
-    export default {
-        name: 'Head',
-        data() {
-            return {
-                userInfo: {},
-                store:useStore()
-            }
-        },
-        methods: {
-            //点击第几页
-            async handleCommand(command) {
-                if (command == 'logout') {
-                    await logout();
-                    this.$router.push({
-                        name: 'Login'
-                    })
-                }
-            }
-        },mounted() {
-            this.userInfo = this.store.state.userInfo
+    import {ref,onMounted} from "vue";
+    import {useRouter} from "vue-router";
+
+
+    const store = useStore()
+    const userInfo = ref({})
+    const router = useRouter();
+
+    const handleCommand = async(command)=>{
+        if (command == 'logout') {
+            await logout();
+            router.push({
+                name: 'Login'
+            })
         }
     }
+    onMounted(() =>{
+        userInfo.value = store.state.userInfo
+    })
 </script>
 <style>
   .el-dropdown-link {

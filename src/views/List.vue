@@ -131,7 +131,7 @@
                         <Plus/>
                     </el-icon>
                 </el-upload>
-                <button v-if="formData.photo && !this.formDisabled" style="position:absolute;top:0;left:186px;"
+                <button v-if="formData.photo && !formDisabled" style="position:absolute;top:0;left:186px;"
                         @click="removePhoto()">
                     <el-icon>
                         <Delete/>
@@ -142,119 +142,112 @@
         <template #footer>
       <span class="dialog-footer" v-if="!formDisabled">
         <el-button @click="dialogVisible = false;">取消</el-button>
-        <el-button type="primary" @click="save()">保存</el-button>
+        <el-button type="primary" @click="saveTest(form)">保存</el-button>
       </span>
         </template>
     </el-dialog>
 </template>
 
-<script>
-    import {save, findById, testList, delById, baseFileUrl, baseApiUrl} from "../common/api.js";
+<script setup>
+    import {save, findById, testList, delById, baseFileUrl, baseApiUrl,successMsg} from "../common/api.js";
+    import {ref, onMounted} from "vue"
+    import {ElMessage} from 'element-plus'
 
     const initFormData = {id: '', name: '', department: '', sex: '男', isMarry: false, birthday: '', photo: ''};
-    export default {
-        name: 'List',
-        data() {
-            return {
-                formData: {...initFormData},
-                baseFileUrl: baseFileUrl,
-                baseApiUrl: baseApiUrl,
-                dialogVisible: false,
-                dialogTitle: '新增',
-                searchKey: '',
-                formDisabled: false,
-                pages: 1,
-                size: 10,
-                total: 0,
-                loading: false,
-                datas: [],
-                rules: {
-                    name: [
-                        {required: true, message: '请填写姓名', trigger: 'blur'},
-                        {min: 2, max: 10, message: '字符长度2-10', trigger: 'blur'},
-                    ],
-                    department: [
-                        {required: true, message: '请填写部门', trigger: 'blur'},
-                        {min: 1, max: 30, message: '字符长度1-30', trigger: 'blur'},
-                    ]
-                }
-            }
-        },
-        methods: {
-            //点击第几页
-            handleCurrentChange(pages) {
-                this.pages = pages;
-                this.getData();
-                console.log(this.pages);
-            },
-            handleSizeChange(size) {
-                this.size = size;
-                this.getData();
-                console.log(this.size);
-            },
-            async handleSearch(index, row) {
-                let data = await findById({id: row.id});
-                this.formData = data;
-                this.dialogVisible = true;
-            },
-            async updateIsMarry(row) {
-                await save({id: row.id, isMarry: row.isMarry});
-                this.$message.success("操作成功");
-            },
-            async updateStatus(row) {
-                await save({id: row.id, status: row.status.value});
-                this.$message.success("操作成功");
-            },
-            handleAvatarSuccess(res, uploadFile) {
-                this.formData.photo = res.data.filePath;
-            },
-            removePhoto() {
-                this.formData.photo = '';
-            },
-            addTest() {
-                this.formDisabled = false;
-                this.formData = {...initFormData};
-                this.dialogVisible = true;
-            },
-            async delTest(index, row) {
-                await delById({id: row.id});
-                this.getData();
-                this.$message.success("操作成功");
-            },
-            handleClick(e) {
-                let target = e.target;
-                if (target.nodeName == 'SPAN' || target.nodeName == 'I') {
-                    target = e.target.parentNode;
-                }
-                target.blur();
-            }, save() {
-                this.$refs.form.validate(async (valid) => {
-                    if (valid) {
-                        let  data = {
-                            ...this.formData
-                        }
-                        await save(data);
-                        this.dialogVisible = false;
-                        this.formData = initFormData;
-                        this.getData();
-                        this.$message.success("操作成功");
-                    }
-                })
-            },
-            async getData() {
-                this.loading = true;
-                const data = await testList({pages: this.pages, size: this.size, name: this.searchKey});
-                this.datas = data.records;
-                this.pages = data.current;
-                this.size = data.size;
-                this.total = data.total;
-                this.loading = false;
-            }
-        },
-        mounted() {
-            this.getData();
-        }
+    const formData = ref({...initFormData})
+    const dialogVisible = ref(false)
+    const dialogTitle = ref('新增')
+    const searchKey = ref('')
+    const formDisabled = ref(false)
+    const pages = ref(1)
+    const size = ref(10)
+    const total = ref(0)
+    const loading = ref(false)
+    const datas = ref([])
+    const form = ref(null)
+    const rules = ref({
+        name: [
+            {required: true, message: '请填写姓名', trigger: 'blur'},
+            {min: 2, max: 10, message: '字符长度2-10', trigger: 'blur'},
+        ],
+        department: [
+            {required: true, message: '请填写部门', trigger: 'blur'},
+            {min: 1, max: 30, message: '字符长度1-30', trigger: 'blur'},
+        ]
+    })
+    //点击第几页
+    const handleCurrentChange = (pages) => {
+        pages.value = pages;
+        getData();
     }
+    const handleSizeChange = (size) => {
+        size.value = size;
+        getData();
+    }
+    const handleSearch = async (index, row) => {
+        let data = await findById({id: row.id});
+        formData.value = data;
+        dialogVisible.value = true;
+    }
+    const updateIsMarry = async (row) => {
+        await save({id: row.id, isMarry: row.isMarry});
+        ElMessage.success(successMsg);
+    }
+    const updateStatus = async (row) => {
+        await save({id: row.id, status: row.status.value});
+        ElMessage.success(successMsg);
+    }
+    const handleAvatarSuccess = (res) => {
+        formData.value.photo = res.data.filePath;
+    }
+    const removePhoto = () => {
+        formData.value.photo = '';
+    }
+    const addTest = () => {
+        formDisabled.value = false;
+        formData.value = {...initFormData};
+        dialogVisible.value = true;
+    }
+    const delTest = async (index, row) => {
+        await delById({id: row.id});
+        getData();
+        ElMessage.success(successMsg);
+    }
+    const handleClick = (e) => {
+        let target = e.target;
+        if (target.nodeName == 'SPAN' || target.nodeName == 'I') {
+            target = e.target.parentNode;
+        }
+        target.blur();
+    }
+    const saveTest = async (form) => {
+        console.log('form:',form)
+        await  form.validate(async (valid) => {
+            if (valid) {
+                let data = {
+                    ...formData.value
+                }
+                await save(data);
+                dialogVisible.value = false;
+                formData.value = initFormData;
+                getData();
+                ElMessage.success(successMsg);
+            }
+        })
+    }
+    const getData = async () => {
+        loading.value = true;
+        const data1 = await testList({pages: pages.value, size: size.value, name: searchKey.value});
+        datas.value = data1.records;
+        pages.value = data1.current;
+        size.value = data1.size;
+        total.value = data1.total;
+        loading.value = false;
+    }
+    onMounted(() => {
+        getData()
+    })
+
 </script>
 <style>
     .avatar-uploader .avatar {
