@@ -1,7 +1,13 @@
 html,
 body,
-#app{
+#app {
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
+.el-table__body tr,
+.el-table__body td {
+    font-size: 12px;
+}
+

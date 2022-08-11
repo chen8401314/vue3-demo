@@ -3,6 +3,7 @@
             v-model="searchKey"
             style="width:300px;height:30px"
             placeholder="请输入姓名搜索"
+            clearable = “true”
     >
         <template #append>
             <el-button @click="getData();">
@@ -16,20 +17,21 @@
                style="margin-left: 20px;width:60px;height:30px;">
         新增
     </el-button>
-    <el-table :data="datas" style="margin-top:20px;" v-loading="loading" border height="auto">
+    <el-table :data="datas" style="margin-top:20px;"  v-loading="loading" border height="auto" :row-style="{height:'40px'}"
+              :cell-style="{padding:'0px'}" :header-cell-style="{'text-align':'center'}" >
         <el-table-column prop="id" label="ID" v-if="false"/>
-        <el-table-column type="index" label="序号" width="80"/>
-        <el-table-column prop="name" label="姓名" width="180"/>
-        <el-table-column prop="sex" label="性别" width="180"/>
-        <el-table-column prop="department" label="部门" width="180"/>
-        <el-table-column prop="birthday" label="生日" width="180"/>
-        <el-table-column label="是否结婚">
+        <el-table-column type="index" label="序号" width="60"/>
+        <el-table-column prop="name" label="姓名" width="150"/>
+        <el-table-column prop="sex" label="性别" width="60" align="center"/>
+        <el-table-column prop="age" label="年龄" width="60"  align="center"/>
+        <el-table-column prop="department" label="部门" width="120"  align="center"/>
+        <el-table-column prop="birthday" label="生日" width="100"  align="center"/>
+        <el-table-column label="是否结婚" width="100"  align="center">
             <template #default="scope">
                 <el-switch v-model="scope.row.isMarry" @change="updateIsMarry(scope.row)"/>
             </template>
         </el-table-column>
-        <el-table-column prop="homeAddress" label="家庭住址" width="360"/>
-        <el-table-column label="状态">
+        <el-table-column label="状态"  width="100"  align="center">
             <template #default="scope">
                 <el-switch v-model="scope.row.status.value"
                            :active-value="1"
@@ -38,14 +40,15 @@
                 />
             </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="180">
+        <el-table-column prop="homeAddress" label="家庭住址" />
+        <el-table-column fixed="right" label="操作" width="140"  align="center">
             <template #default="scope">
-                <el-button @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
+                <el-button size="small" @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
                     <el-icon style="vertical-align: middle">
                         <Search/>
                     </el-icon>
                 </el-button>
-                <el-button type="primary"
+                <el-button size="small" type="primary"
                            @click="dialogTitle='编辑';formDisabled=false;handleSearch(scope.$index, scope.row);" circle>
                     <el-icon style="vertical-align: middle">
                         <Edit/>
@@ -54,7 +57,7 @@
 
                 <el-popconfirm title="确定要删除吗?" @confirm="delTest(scope.$index, scope.row);">
                     <template #reference>
-                        <el-button type="danger" circle>
+                        <el-button size="small" type="danger" circle>
                             <el-icon style="vertical-align: middle">
                                 <Delete/>
                             </el-icon>
@@ -160,7 +163,7 @@
     const searchKey = ref('')
     const formDisabled = ref(false)
     const pages = ref(1)
-    const size = ref(10)
+    const size = ref(15)
     const total = ref(0)
     const loading = ref(false)
     const datas = ref([])
@@ -176,12 +179,12 @@
         ]
     })
     //点击第几页
-    const handleCurrentChange = (pages) => {
-        pages.value = pages;
+    const handleCurrentChange = (params) => {
+        pages.value = params;
         getData();
     }
-    const handleSizeChange = (size) => {
-        size.value = size;
+    const handleSizeChange = (params) => {
+        size.value = params;
         getData();
     }
     const handleSearch = async (index, row) => {
