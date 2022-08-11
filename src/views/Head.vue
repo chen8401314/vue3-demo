@@ -1,14 +1,15 @@
 <template>
 
     <el-row align="middle" justify="space-between" style="height:100%;">
-        <el-col :span="2">
+        <el-col :span="5">
         </el-col>
-        <el-col :span="16" style="text-align:center">
+        <el-col :span="10" style="text-align:center">
             <span style="font-size: 40px; color: black;letter-spacing: 10px;font-family: 'STCaiyun'">测试管理系统</span>
         </el-col>
-        <el-col :span="2">
-            <div>
+        <el-col :span="5" style="">
+            <div style="text-align: right">
                 登录用户:{{ userInfo.username }}
+                <el-avatar :icon="UserFilled" />
                 <el-dropdown trigger="click" @command="handleCommand">
         <span class="el-dropdown-link">
            <el-icon class="el-icon--right"><arrow-down/></el-icon>
@@ -22,6 +23,7 @@
                 </el-dropdown>
             </div>
         </el-col>
+
     </el-row>
 
 
@@ -31,7 +33,7 @@
     import {useStore} from "vuex";
     import {ref, onMounted} from "vue";
     import {useRouter} from "vue-router";
-
+    import { UserFilled } from '@element-plus/icons-vue'
 
     const store = useStore()
     const userInfo = ref({})
@@ -55,6 +57,8 @@
         color: var(--el-color-primary);
         display: flex;
         align-items: center;
+        vertical-align: center;
+        padding-top: 20px;
     }
 
     .el-dropdown {
