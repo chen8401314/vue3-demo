@@ -122,7 +122,7 @@
             <el-form-item label="头像" prop="photo">
                 <el-upload
                         class="avatar-uploader"
-                        :action="baseApiUrl+'minio/anon/uploadFile'"
+                        :action="baseUploadUrl"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :disabled="formDisabled"
@@ -152,7 +152,7 @@
 </template>
 
 <script setup>
-    import {save, findById, testList, delById, baseFileUrl, baseApiUrl, successMsg} from "../common/api.js";
+    import {save, findById, testList, delById, baseFileUrl, baseUploadUrl, successMsg} from "../common/api.js";
     import {ref, onMounted} from "vue"
     import {ElMessage} from 'element-plus'
 

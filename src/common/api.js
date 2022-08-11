@@ -2,6 +2,7 @@ import axiosHttp from './axios.js'
 
 export const baseFileUrl = 'http://192.168.5.78:9000/test/';
 export const baseApiUrl = 'http://localhost:8069/';
+export const baseUploadUrl = baseApiUrl+'minio/anon/uploadFile';
 export const successMsg = '操作成功';
 export const login = (data) => {
     return axiosHttp({
