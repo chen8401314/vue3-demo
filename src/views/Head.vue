@@ -35,6 +35,7 @@
     import {useStore} from "vuex";
     import {onMounted, ref} from "vue";
     import {useRouter} from "vue-router";
+    import { UserFilled } from '@element-plus/icons-vue'
 
     const store = useStore()
     const userInfo = ref({})
