@@ -33,9 +33,9 @@
         </el-table-column>
         <el-table-column label="状态"  width="100"  align="center">
             <template #default="scope">
-                <el-switch v-model="scope.row.status.value"
-                           :active-value="1"
-                           :inactive-value="0"
+                <el-switch v-model="scope.row.status"
+                           active-value="VALID"
+                           inactive-value="INVALID"
                            @change="updateStatus(scope.row)"
                 />
             </template>
@@ -197,7 +197,7 @@
         ElMessage.success(successMsg);
     }
     const updateStatus = async (row) => {
-        await save({id: row.id, status: row.status.value});
+        await save({id: row.id, status: row.status});
         ElMessage.success(successMsg);
     }
     const handleAvatarSuccess = (res) => {

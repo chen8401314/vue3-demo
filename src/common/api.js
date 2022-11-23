@@ -27,7 +27,7 @@ export const logout = () => {
 export const testList = (params) => {
     return axiosHttp({
         method: 'GET',
-        url: '/test/findPageDTO',
+        url: '/test/selectPage',
         params: params
     });
 }
