@@ -18,7 +18,7 @@
         </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item>个人信息</el-dropdown-item>
+                            <el-dropdown-item command="info">个人信息</el-dropdown-item>
                             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -27,7 +27,19 @@
         </el-col>
 
     </el-row>
-
+    <el-dialog
+            v-model="dialogVisible"
+            title="个人信息"
+            width="30%"
+            :before-close="handleClose"
+    >
+        <span>用户名:{{ userInfo.username }}</span>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+      </span>
+        </template>
+    </el-dialog>
 
 </template>
 <script setup>
@@ -40,13 +52,16 @@
     const store = useStore()
     const userInfo = ref({})
     const router = useRouter();
-
+    const dialogVisible = ref(false)
     const handleCommand = async (command) => {
         if (command == 'logout') {
             await logout();
             router.push({
                 name: 'Login'
             })
+        }
+        if (command == 'info') {
+            dialogVisible.value = true;
         }
     }
     onMounted(() => {
