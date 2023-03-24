@@ -3,7 +3,7 @@
             v-model="searchKey"
             style="width:300px;height:30px"
             placeholder="请输入姓名搜索"
-            clearable = “true”
+            clearable=“true”
     >
         <template #append>
             <el-button @click="getData();">
@@ -17,21 +17,22 @@
                style="margin-left: 20px;width:60px;height:30px;">
         新增
     </el-button>
-    <el-table :data="datas" style="margin-top:20px;"  v-loading="loading" border height="auto" :row-style="{height:'40px'}"
-              :cell-style="{padding:'0px'}" :header-cell-style="{'text-align':'center'}" >
+    <el-table :data="datas" style="margin-top:20px;" v-loading="loading" border height="auto"
+              :row-style="{height:'40px'}"
+              :cell-style="{padding:'0px'}" :header-cell-style="{'text-align':'center'}">
         <el-table-column prop="id" label="ID" v-if="false"/>
         <el-table-column type="index" label="序号" width="60"/>
         <el-table-column prop="name" label="姓名" width="150"/>
         <el-table-column prop="sex" label="性别" width="60" align="center"/>
-        <el-table-column prop="age" label="年龄" width="60"  align="center"/>
-        <el-table-column prop="department" label="部门" width="120"  align="center"/>
-        <el-table-column prop="birthday" label="生日" width="100"  align="center"/>
-        <el-table-column label="是否结婚" width="100"  align="center">
+        <el-table-column prop="age" label="年龄" width="60" align="center"/>
+        <el-table-column prop="department" label="部门" width="120" align="center"/>
+        <el-table-column prop="birthday" label="生日" width="100" align="center"/>
+        <el-table-column label="是否结婚" width="100" align="center">
             <template #default="scope">
                 <el-switch v-model="scope.row.isMarry" @change="updateIsMarry(scope.row)"/>
             </template>
         </el-table-column>
-        <el-table-column label="状态"  width="100"  align="center">
+        <el-table-column label="状态" width="100" align="center">
             <template #default="scope">
                 <el-switch v-model="scope.row.status"
                            active-value="VALID"
@@ -40,10 +41,11 @@
                 />
             </template>
         </el-table-column>
-        <el-table-column prop="homeAddress" label="家庭住址" />
-        <el-table-column fixed="right" label="操作" width="140"  align="center">
+        <el-table-column prop="homeAddress" label="家庭住址"/>
+        <el-table-column fixed="right" label="操作" width="140" align="center">
             <template #default="scope">
-                <el-button size="small" @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
+                <el-button size="small"
+                           @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
                     <el-icon style="vertical-align: middle">
                         <Search/>
                     </el-icon>
@@ -152,8 +154,8 @@
 </template>
 
 <script setup>
-    import {save, findById, testList, delById, baseFileUrl, baseUploadUrl, successMsg} from "../common/api.js";
-    import {ref, onMounted} from "vue"
+    import {delById, findById, save, successMsg, testList} from "../common/api.js";
+    import {onMounted, ref} from "vue"
     import {ElMessage} from 'element-plus'
 
     const initFormData = {id: '', name: '', department: '', sex: '男', isMarry: false, birthday: '', photo: ''};

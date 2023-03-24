@@ -18,7 +18,7 @@
 
 <script setup>
     import {login} from "../common/api.js";
-    import {ref, onMounted, onUnmounted} from "vue"
+    import {onMounted, onUnmounted, ref} from "vue"
     import {useRouter} from "vue-router";
 
     const router = useRouter();

@@ -1,21 +1,21 @@
 <template>
-        <div className="block">
-            <span className="demonstration">Picker with quick options</span>
-            <el-date-picker
-                    v-model="value2"
-                    type="date"
-                    placeholder="Pick a day"
-                    :disabled-date="disabledDate"
-                    :shortcuts="shortcuts"
-                    :size="size"
-            />
-        </div>
+    <div className="block">
+        <span className="demonstration">Picker with quick options</span>
+        <el-date-picker
+                v-model="value2"
+                type="date"
+                placeholder="Pick a day"
+                :disabled-date="disabledDate"
+                :shortcuts="shortcuts"
+                :size="size"
+        />
+    </div>
 </template>
 
 <script setup>
     import {ref} from 'vue'
 
-    const size = ref<'' | 'large' | 'small'>('')
+    const size = ref < '' | 'large' | 'small' > ('')
 
     const value1 = ref('')
     const value2 = ref('')
