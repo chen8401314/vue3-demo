@@ -18,6 +18,8 @@
     </el-container>
 </template>
 <script setup>
+    import Head from '@/views/Head.vue'
+    import Aside from '@/views/Aside.vue'
     import {useStore} from "vuex";
     import {onMounted, ref} from "vue";
 
