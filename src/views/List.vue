@@ -124,13 +124,13 @@
             <el-form-item label="头像" prop="photo">
                 <el-upload
                         class="avatar-uploader"
-                        :action="baseUploadUrl"
+                        :action="BASE_UPLOAD_URL"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :disabled="formDisabled"
                 >
                     <div style="display:inline-block;position:relative" v-if="formData.photo">
-                        <img :src="baseFileUrl+formData.photo" class="avatar"/>
+                        <img :src="BASE_FILE_URL+formData.photo" class="avatar"/>
                     </div>
                     <el-icon v-else class="avatar-uploader-icon">
                         <Plus/>
@@ -155,7 +155,7 @@
 
 <script setup>
     import {delById, findById, save, testList} from "../common/api/testApi.js";
-    import {SUCCESS_MSG} from "@/common/config";
+    import {BASE_UPLOAD_URL,BASE_FILE_URL, SUCCESS_MSG} from "@/common/config";
     import {onMounted, ref} from "vue"
     import {ElMessage} from 'element-plus'
 
