@@ -8,3 +8,6 @@
  * 苏州demo： http://demoline-api.hjbim.com
  * */
 export const API_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:8069/' : process.env.API_URL
+export const BASE_FILE_URL = 'http://192.168.5.78:9000/test/';
+export const BASE_UPLOAD_URL = API_URL+'minio/anon/uploadFile';
+export const SUCCESS_MSG = '操作成功';

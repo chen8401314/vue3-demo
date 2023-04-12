@@ -154,7 +154,8 @@
 </template>
 
 <script setup>
-    import {delById, findById, save, successMsg, testList} from "../common/api.js";
+    import {delById, findById, save, testList} from "../common/api/testApi.js";
+    import {SUCCESS_MSG} from "@/common/config";
     import {onMounted, ref} from "vue"
     import {ElMessage} from 'element-plus'
 
@@ -196,11 +197,11 @@
     }
     const updateIsMarry = async (row) => {
         await save({id: row.id, isMarry: row.isMarry});
-        ElMessage.success(successMsg);
+        ElMessage.success(SUCCESS_MSG);
     }
     const updateStatus = async (row) => {
         await save({id: row.id, status: row.status});
-        ElMessage.success(successMsg);
+        ElMessage.success(SUCCESS_MSG);
     }
     const handleAvatarSuccess = (res) => {
         formData.value.photo = res.data.filePath;
@@ -216,7 +217,7 @@
     const delTest = async (index, row) => {
         await delById({id: row.id});
         getData();
-        ElMessage.success(successMsg);
+        ElMessage.success(SUCCESS_MSG);
     }
     const handleClick = (e) => {
         let target = e.target;
@@ -236,7 +237,7 @@
                 dialogVisible.value = false;
                 formData.value = initFormData;
                 getData();
-                ElMessage.success(successMsg);
+                ElMessage.success(SUCCESS_MSG);
             }
         })
     }

@@ -43,7 +43,7 @@
 
 </template>
 <script setup>
-    import {logout} from "../common/api.js"
+    import {logout} from "../common/api/userApi.js"
     import {useStore} from "vuex";
     import {onMounted, ref} from "vue";
     import {useRouter} from "vue-router";

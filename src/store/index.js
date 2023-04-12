@@ -1,5 +1,5 @@
 import {createStore} from "vuex";
-import {getUserInfo} from "../common/api.js";
+import {getUserInfo} from "../common/api/userApi.js";
 
 export default createStore({
     namespaced: true,

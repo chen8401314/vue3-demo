@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-    import {login} from "../common/api.js";
+    import {login} from "../common/api/userApi.js";
     import {onMounted, onUnmounted, ref} from "vue"
     import {useRouter} from "vue-router";
 
