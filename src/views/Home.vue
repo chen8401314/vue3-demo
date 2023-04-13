@@ -45,4 +45,12 @@
     })
 </script>
 <style>
+    .el-pagination {
+        background: white;
+        padding: 5px;
+        padding-left: 10px;
+        border: 1px solid var(--el-border-color-lighter);
+        border-top: 0px;
+    }
+
 </style>

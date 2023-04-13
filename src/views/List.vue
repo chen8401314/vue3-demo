@@ -17,7 +17,7 @@
                style="margin-left: 20px;width:60px;height:30px;">
         新增
     </el-button>
-    <el-table :data="datas" style="margin-top:20px;" v-loading="loading" border height="auto"
+    <el-table :data="datas" style="margin-top:20px;" v-loading="loading" border max-height="650"
               :row-style="{height:'40px'}"
               :cell-style="{padding:'0px'}" :header-cell-style="{'text-align':'center'}">
         <el-table-column prop="id" label="ID" v-if="false"/>
@@ -42,7 +42,7 @@
             </template>
         </el-table-column>
         <el-table-column prop="homeAddress" label="家庭住址"/>
-        <el-table-column fixed="right" label="操作" width="140" align="center">
+        <el-table-column label="操作" width="140" align="center">
             <template #default="scope">
                 <el-button size="small"
                            @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
@@ -71,6 +71,7 @@
         </el-table-column>
     </el-table>
     <el-pagination
+
             v-model:currentPage="pages"
             v-model:page-size="size"
             :page-sizes="[10, 20, 30, 40]"
@@ -80,6 +81,7 @@
             :total="total"
             @current-change="handleCurrentChange">
     </el-pagination>
+
     <el-dialog
             v-model="dialogVisible"
             :title="dialogTitle+'用户'"
@@ -155,7 +157,7 @@
 
 <script setup>
     import {delById, findById, save, testList} from "../common/api/testApi.js";
-    import {BASE_UPLOAD_URL,BASE_FILE_URL, SUCCESS_MSG} from "@/common/config";
+    import {BASE_UPLOAD_URL, BASE_FILE_URL, SUCCESS_MSG} from "@/common/config";
     import {onMounted, ref} from "vue"
     import {ElMessage} from 'element-plus'
 
@@ -256,6 +258,8 @@
 
 </script>
 <style>
+
+
     .avatar-uploader .avatar {
         width: 178px;
         height: 178px;
