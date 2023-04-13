@@ -4,6 +4,7 @@
             style="width:300px;height:30px"
             placeholder="请输入姓名搜索"
             clearable=“true”
+            @clear = 'getData()'
     >
         <template #append>
             <el-button @click="getData();">
