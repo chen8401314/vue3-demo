@@ -22,6 +22,10 @@
     import Aside from '@/views/Aside.vue'
     import {useStore} from "vuex";
     import {onMounted, ref} from "vue";
+    import {useRouter} from "vue-router";
+    import {ElMessage} from "element-plus";
+
+    const router = useRouter();
 
     const maxAsideHeight = ref('0')
     const maxHeight = ref('0')
@@ -31,6 +35,7 @@
     const init = async () => {
         await store.dispatch("getUserInfo");
         isInit.value = true;
+
     }
     onMounted(() => {
         init();

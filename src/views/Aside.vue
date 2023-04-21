@@ -1,7 +1,7 @@
 <template>
     <el-menu
             class="el-menu-vertical-demo"
-            default-active="0"
+            :default-active="defaultPath"
             @open="handleOpen"
             @close="handleClose"
             unique-opened="true"
@@ -37,7 +37,8 @@
 
 </template>
 <script setup>
-
+    import {onMounted, ref} from "vue";
+    const defaultPath = ref('/list');
 
 </script>
 <style>
