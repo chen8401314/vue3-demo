@@ -4,7 +4,7 @@
             style="width:300px;height:30px"
             placeholder="请输入姓名搜索"
             clearable=“true”
-            @clear = 'getData()'
+            @clear='getData()'
     >
         <template #append>
             <el-button @click="getData();">
@@ -22,18 +22,16 @@
               :row-style="{height:'40px'}"
               :cell-style="{padding:'0px'}" :header-cell-style="{'text-align':'center'}">
         <el-table-column prop="id" label="ID" v-if="false"/>
-        <el-table-column type="index" label="序号" width="60"/>
-        <el-table-column prop="name" label="姓名" width="150"/>
-        <el-table-column prop="sex" label="性别" width="60" align="center"/>
-        <el-table-column prop="age" label="年龄" width="60" align="center"/>
-        <el-table-column prop="department" label="部门" width="120" align="center"/>
-        <el-table-column prop="birthday" label="生日" width="100" align="center"/>
-        <el-table-column label="是否结婚" width="100" align="center">
+        <el-table-column type="index" label="序号" width="100" align="center"/>
+        <el-table-column prop="name" label="姓名" width="450"/>
+        <el-table-column prop="age" label="年龄" width="150" align="center"/>
+        <el-table-column prop="birthday" label="生日" width="200" align="center"/>
+        <el-table-column label="是否结婚" width="200" align="center">
             <template #default="scope">
-                <el-switch v-model="scope.row.isMarry" @change="updateIsMarry(scope.row)"/>
+                <el-switch v-model="scope.row.marry" @change="updateMarry(scope.row)"/>
             </template>
         </el-table-column>
-        <el-table-column label="状态" width="100" align="center">
+        <el-table-column label="状态" width="200" align="center">
             <template #default="scope">
                 <el-switch v-model="scope.row.status"
                            active-value="VALID"
@@ -42,8 +40,7 @@
                 />
             </template>
         </el-table-column>
-        <el-table-column prop="homeAddress" label="家庭住址"/>
-        <el-table-column label="操作" width="140" align="center">
+        <el-table-column fixed="right" label="操作" width="250" align="center">
             <template #default="scope">
                 <el-button size="small"
                            @click="dialogTitle='查看';formDisabled=true;handleSearch(scope.$index, scope.row);" circle>
@@ -73,7 +70,7 @@
     </el-table>
     <el-pagination
 
-            v-model:currentPage="pages"
+            v-model:currentPage="page"
             v-model:page-size="size"
             :page-sizes="[10, 20, 30, 40]"
             layout="total, sizes, prev, pager, next, jumper"
@@ -96,20 +93,11 @@
             <el-form-item label="姓名" prop="name">
                 <el-input v-model="formData.name"/>
             </el-form-item>
-            <el-form-item label="性别" prop="sex">
-                <el-radio-group v-model="formData.sex">
-                    <el-radio label="男"/>
-                    <el-radio label="女"/>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="是否结婚" prop="isMarry">
-                <el-radio-group v-model="formData.isMarry">
+            <el-form-item label="是否结婚" prop="marry">
+                <el-radio-group v-model="formData.marry">
                     <el-radio :label="false">否</el-radio>
                     <el-radio :label="true">是</el-radio>
                 </el-radio-group>
-            </el-form-item>
-            <el-form-item label="部门" prop="department">
-                <el-input v-model="formData.department"/>
             </el-form-item>
             <el-form-item label="年龄" prop="age">
                 <el-input type="number" v-model="formData.age"/>
@@ -119,9 +107,6 @@
                         v-model="formData.birthday"
                         type="date"
                 />
-            </el-form-item>
-            <el-form-item label="家庭住址" prop="homeAddress">
-                <el-input v-model="formData.homeAddress"/>
             </el-form-item>
 
             <el-form-item label="头像" prop="photo">
@@ -157,18 +142,18 @@
 </template>
 
 <script setup>
-    import {delById, findById, save, testList} from "../common/api/testApi.js";
-    import {BASE_UPLOAD_URL, BASE_FILE_URL, SUCCESS_MSG} from "@/common/config";
+    import {delById, findById, save, testList, update} from "../common/api/testApi.js";
+    import {SUCCESS_MSG} from "@/common/config";
     import {onMounted, ref} from "vue"
     import {ElMessage} from 'element-plus'
 
-    const initFormData = {id: '', name: '', department: '', sex: '男', isMarry: false, birthday: '', photo: ''};
+    const initFormData = {id: '', name: '', age: null, marry: false, birthday: '', photo: ''};
     const formData = ref({...initFormData})
     const dialogVisible = ref(false)
     const dialogTitle = ref('新增')
     const searchKey = ref('')
     const formDisabled = ref(false)
-    const pages = ref(1)
+    const page = ref(1)
     const size = ref(15)
     const total = ref(0)
     const loading = ref(false)
@@ -178,10 +163,6 @@
         name: [
             {required: true, message: '请填写姓名', trigger: 'blur'},
             {min: 2, max: 10, message: '字符长度2-10', trigger: 'blur'},
-        ],
-        department: [
-            {required: true, message: '请填写部门', trigger: 'blur'},
-            {min: 1, max: 30, message: '字符长度1-30', trigger: 'blur'},
         ]
     })
     //点击第几页
@@ -198,12 +179,12 @@
         formData.value = data;
         dialogVisible.value = true;
     }
-    const updateIsMarry = async (row) => {
-        await save({id: row.id, isMarry: row.isMarry});
+    const updateMarry = async (row) => {
+        await update({id: row.id, marry: row.marry});
         ElMessage.success(SUCCESS_MSG);
     }
     const updateStatus = async (row) => {
-        await save({id: row.id, status: row.status});
+        await update({id: row.id, status: row.status});
         ElMessage.success(SUCCESS_MSG);
     }
     const handleAvatarSuccess = (res) => {
@@ -236,7 +217,11 @@
                 let data = {
                     ...formData.value
                 }
-                await save(data);
+                if (data.id === '') {
+                    await save(data);
+                } else {
+                    await update(data);
+                }
                 dialogVisible.value = false;
                 formData.value = initFormData;
                 getData();
@@ -246,9 +231,9 @@
     }
     const getData = async () => {
         loading.value = true;
-        const data1 = await testList({pages: pages.value, size: size.value, name: searchKey.value});
-        datas.value = data1.records;
-        pages.value = data1.current;
+        const data1 = await testList({page: page.value, size: size.value, name: searchKey.value});
+        datas.value = data1.content;
+        page.value = data1.page;
         size.value = data1.size;
         total.value = data1.total;
         loading.value = false;
