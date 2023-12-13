@@ -112,13 +112,14 @@
             <el-form-item label="头像" prop="photo">
                 <el-upload
                         class="avatar-uploader"
-                        :action="BASE_UPLOAD_URL"
+                        action="#"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
+                        :file-list="fileList"
                         :disabled="formDisabled"
+                        :http-request="upload"
                 >
                     <div style="display:inline-block;position:relative" v-if="formData.photo">
-                        <img :src="BASE_FILE_URL+formData.photo" class="avatar"/>
+                        <img :src="avatarUrl" class="avatar"/>
                     </div>
                     <el-icon v-else class="avatar-uploader-icon">
                         <Plus/>
@@ -146,6 +147,8 @@
     import {SUCCESS_MSG} from "@/common/config";
     import {onMounted, ref} from "vue"
     import {ElMessage} from 'element-plus'
+    import {getDownloadUrl, getUploadConfig} from "../common/api/fileApi";
+    import axios from "axios";
 
     const initFormData = {id: '', name: '', age: null, marry: false, birthday: '', photo: ''};
     const formData = ref({...initFormData})
@@ -159,6 +162,7 @@
     const loading = ref(false)
     const datas = ref([])
     const form = ref(null)
+    const avatarUrl = ref(null)
     const rules = ref({
         name: [
             {required: true, message: '请填写姓名', trigger: 'blur'},
@@ -177,6 +181,8 @@
     const handleSearch = async (index, row) => {
         let data = await findById({id: row.id});
         formData.value = data;
+        const url = await getDownloadUrl(formData.value.photo);
+        avatarUrl.value = url;
         dialogVisible.value = true;
     }
     const updateMarry = async (row) => {
@@ -187,9 +193,6 @@
         await update({id: row.id, status: row.status});
         ElMessage.success(SUCCESS_MSG);
     }
-    const handleAvatarSuccess = (res) => {
-        formData.value.photo = res.data.filePath;
-    }
     const removePhoto = () => {
         formData.value.photo = '';
     }
@@ -197,6 +200,17 @@
         formDisabled.value = false;
         formData.value = {...initFormData};
         dialogVisible.value = true;
+    }
+    const upload = async (fileList) => {
+        const data1 = await getUploadConfig({module: 'test', file: fileList.file.name});
+        await axios.put(data1.url, new Blob([fileList.file]), {
+            headers: {
+                'Content-Type': data1.contentType
+            }
+        })
+        const url =await getDownloadUrl(data1.path)
+        avatarUrl.value = url;
+        formData.value.photo = data1.path;
     }
     const delTest = async (index, row) => {
         await delById({id: row.id});

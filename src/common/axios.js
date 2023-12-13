@@ -10,7 +10,11 @@ const requests = axios.create({
     timeout: 30000,
     withCredentials: true
 })
-
+const uploadRequests = axios.create({
+    // 配置基础路径
+    timeout: 30000,
+    withCredentials: true
+})
 // 配置拦截器
 /*requests.interceptors.request.use(config => {
     // 请求带token
