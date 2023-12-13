@@ -10,7 +10,11 @@ export default createStore({
     actions: {
         async getUserInfo(content) {
             let data = await getUserInfo();
-            content.commit('changeUserInfo',data);
+            if (data == null) {
+
+            }else{
+                content.commit('changeUserInfo',data);
+            }
         }
     },
     mutations: {

@@ -40,7 +40,7 @@ requests.interceptors.response.use((res) => {
     }
 
 }, error => {
-    if (error.response.data.code === 401) {
+    if (error.response.status === 401) {
         router.push({
             name: 'Login'
         })
