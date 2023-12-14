@@ -35,7 +35,7 @@ requests.interceptors.response.use((res) => {
     if (res.data.code === 200) {
         return res.data.data;
     } else {
-        ElMessage(res.data.message);
+        ElMessage.error(res.data.message);
         return Promise.reject(new Error(res.data.message));
     }
 
@@ -44,6 +44,9 @@ requests.interceptors.response.use((res) => {
         router.push({
             name: 'Login'
         })
+    }
+    if(error.response.status === 400){
+        ElMessage.error("错误的请求");
     }
     // 请求失败的回调函数
     return Promise.reject('fail');

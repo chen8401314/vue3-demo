@@ -104,6 +104,7 @@
             </el-form-item>
             <el-form-item label="生日" prop="birthday">
                 <el-date-picker
+                        value-format= "YYYY-MM-DD"
                         v-model="formData.birthday"
                         type="date"
                 />
