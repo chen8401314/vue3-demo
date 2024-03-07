@@ -182,8 +182,10 @@
     const handleSearch = async (index, row) => {
         let data = await findById({id: row.id});
         formData.value = data;
-        const url = await getDownloadUrl(formData.value.photo);
-        avatarUrl.value = url;
+        if(formData.value.photo){
+          const url = await getDownloadUrl(formData.value.photo);
+          avatarUrl.value = url;
+        }
         dialogVisible.value = true;
     }
     const updateMarry = async (row) => {
