@@ -69,7 +69,7 @@
         </el-table-column>
     </el-table>
     <el-pagination
-
+        style="margin-top: 10px; margin-bottom: 10px;"
             v-model:currentPage="page"
             v-model:page-size="size"
             :page-sizes="[10, 20, 30, 40]"
