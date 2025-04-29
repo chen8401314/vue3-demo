@@ -18,37 +18,17 @@
       </el-icon>
     </el-header>
     <el-menu
-        unique-opened="true"
         :collapse="isCollapse"
-        :collapse-transition="false"
         :default-active="defaultPath"
-        router>
-      <el-sub-menu index="1">
-        <template #title>
-          <el-icon>
-            <Operation/>
-          </el-icon>
-          <span>菜单一</span>
-        </template>
-        <el-sub-menu index="1-1">
-          <template #title>子菜单1</template>
-          <el-menu-item index="/list">子菜单1-1</el-menu-item>
-          <el-menu-item index="/test">子菜单1-2</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-      <el-sub-menu>
-        <template #title>
-          <el-icon>
-            <Operation/>
-          </el-icon>
-          <span>菜单二</span>
-        </template>
-        <el-sub-menu>
-          <template #title>子菜单2</template>
-          <el-menu-item index="/list1">子菜单2-1</el-menu-item>
-          <el-menu-item index="/test1">子菜单2-2</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
+        router
+        unique-opened
+    >
+      <!-- 递归渲染菜单项 -->
+      <menu-item
+          v-for="item in menuData"
+          :key="item.index"
+          :item="item"
+      />
     </el-menu>
   </el-container>
 
@@ -56,6 +36,9 @@
 </template>
 <script setup>
 import {ref} from "vue";
+import { resolveComponent } from 'vue'
+import { ElSubMenu, ElMenuItem, ElIcon } from 'element-plus'
+import { h } from 'vue'
 
 const defaultPath = ref('/list');
 const isCollapse = ref(false);
@@ -66,7 +49,94 @@ const toggleCollapse = () => {
   emit('collapse-change', isCollapse.value) // 新增此行
 }
 
+// 菜单数据
+const menuData = ref([
+  {
+    index: '1',
+    title: '菜单一',
+    icon: 'Operation',
+    children: [
+      {
+        index: '1-1',
+        title: '子菜单1',
+        children: [
+          { index: '/list', title: '子菜单1-8' },
+          { index: '/test', title: '子菜单1-2' }
+        ]
+      }
+    ]
+  },
+  {
+    index: '2',
+    title: '菜单二',
+    icon: 'Operation',
+    children: [
+      {
+        index: '2-1',
+        title: '子菜单2',
+        children: [
+          { index: '/list1', title: '子菜单2-1' },
+          { index: '/test1', title: '子菜单2-2' }
+        ]
+      }
+    ]
+  }
+])
+const MenuItem = {
+  name: 'MenuItem',
+  props: ['item'],
+  setup(props) {
+    const renderIcon = (iconName) => {
+      try {
+        if (!iconName) return h('span') // 添加空span占位
+        const IconComponent = resolveComponent(iconName)
+        return IconComponent ? h(IconComponent) : h('span')
+      } catch (e) {
+        console.error('图标渲染失败:', iconName, e)
+        return h('span')
+      }
+    }
 
+    return () => {
+      try {
+        const item = props.item
+        if (!item?.index) { // 加强空值检查
+          console.warn('无效的菜单项:', item)
+          return null
+        }
+
+        // 使用Fragment包裹内容
+        const iconContent = item.icon ?
+            h(ElIcon, null, renderIcon(item.icon)) :
+            h('span', { class: 'icon-placeholder' })
+
+        return item.children?.length ?
+            h(ElSubMenu, {
+              index: item.index,
+              class: { 'has-icon': !!item.icon }
+            }, {
+              title: () => [
+                iconContent,
+                h('span', { class: 'menu-title' }, item.title)
+              ],
+              default: () => item.children.map(child =>
+                  h(MenuItem, { item: child })
+              )
+            }) :
+            h(ElMenuItem, {
+              index: item.index,
+              class: { 'has-icon': !!item.icon }
+            }, () => [
+              iconContent,
+              h('span', { class: 'menu-title' }, item.title)
+            ])
+      } catch (e) {
+        console.error('菜单项渲染失败:', e)
+        return null
+      }
+    }
+  }
+}
 
 </script>
 <style>/* 添加图标旋转动画 */
@@ -74,8 +144,15 @@ const toggleCollapse = () => {
   transform: rotate(180deg);
   transition: transform 0.3s;
 }
-/* 图标间距 */
-.el-menu-item > i, .el-sub-menu__title > i {
-  margin-right: 8px;
+/* 添加无图标时的对齐样式 */
+.el-menu-item > span,
+.el-sub-menu__title > span {
+  margin-left: 8px; /* 保持与有图标时相同的缩进 */
+}
+
+/* 当没有图标时移除左边距 */
+.el-menu-item:not(.has-icon) > span,
+.el-sub-menu__title:not(.has-icon) > span {
+  margin-left: 0;
 }
 </style>
