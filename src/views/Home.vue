@@ -50,8 +50,13 @@
 
     const store = useStore();
     const init = async () => {
+      try {
         await store.dispatch("getUserInfo");
         isInit.value = true;
+      } catch (error){
+
+      }
+
     }
     onMounted(() => {
         init();

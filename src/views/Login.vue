@@ -25,10 +25,12 @@
     const username = ref('');
     const password = ref('');
     const onSubmit = async () => {
-        await login({username: username.value, password: password.value});
+    let data =   await login({username: username.value, password: password.value});
+      if (data) {
         router.push({
-            name: 'Home'
-        })
+          name: 'Home'
+        });
+      }
     }
     const keyDown = (e) => {
         // 回车则执行登录方法 enter键的ASCII是13

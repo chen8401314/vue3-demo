@@ -1,5 +1,6 @@
 import {createStore} from "vuex";
 import {getUserInfo} from "../common/api/userApi.js";
+import router from "@/router";
 
 export default createStore({
     namespaced: true,
@@ -9,11 +10,18 @@ export default createStore({
     getters: {},
     actions: {
         async getUserInfo(content) {
-            let data = await getUserInfo();
-            if (data == null) {
+            try {
+                let data = await getUserInfo();
+                if (data == null) {
 
-            }else{
-                content.commit('changeUserInfo',data);
+                }else{
+                    content.commit('changeUserInfo',data);
+                }
+            } catch (error) {
+                router.push({
+                    name: 'Login'
+                })
+                throw error;
             }
         }
     },

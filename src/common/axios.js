@@ -36,7 +36,7 @@ requests.interceptors.response.use((res) => {
         return res.data.data;
     } else {
         ElMessage.error(res.data.message);
-        return Promise.reject(new Error(res.data.message));
+        //return Promise.reject(new Error(res.data.message));
     }
 
 }, error => {
